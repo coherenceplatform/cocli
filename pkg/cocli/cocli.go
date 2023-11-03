@@ -82,12 +82,31 @@ func AuthenticatedRequest(method string, url string, body io.Reader, bearer_toke
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", bearer_token))
 
-	return client.Do(req)
+	res, err := client.Do(req)
+
+	if res != nil && res.StatusCode == 401 {
+		fmt.Println("Clearing credentials... login again with `cocli auth login` or replace COCLI_REFRESH_TOKEN with a new refresh token.")
+		if CredsFileExists() {
+			ClearCredentialsFile()
+		}
+	}
+
+	return res, err
 }
 
 func GetRefreshedToken() *TokenWithIdToken {
+	if !(CredsFileExists() || IsRefreshTokenVarSet()) {
+		NotifyAuthRequired()
+		panic("Unauthorized")
+	}
+
 	// TODO: handle case where we use refresh token env var
 	token := GetTokenFromCredsFile()
+	if token == nil {
+		token = &oauth2.Token{
+			RefreshToken: os.Getenv("COCLI_REFRESH_TOKEN"),
+		}
+	}
 	ctx := context.Background()
 	tokenSource := &TokenWithIdTokenSource{
 		TokenSource: oauthConfig.TokenSource(ctx, token),
@@ -95,6 +114,11 @@ func GetRefreshedToken() *TokenWithIdToken {
 	// refreshes token automatically, only if needed
 	refreshedToken, err := tokenSource.Token()
 	if err != nil {
+		fmt.Println("Error refreshing access token. Refresh token may be expired.")
+		fmt.Println("Clearing credentials... login again with `cocli auth login` or replace COCLI_REFRESH_TOKEN with a new refresh token.")
+		if CredsFileExists() {
+			ClearCredentialsFile()
+		}
 		panic(err)
 	}
 	WriteTokenFile(refreshedToken)
@@ -211,7 +235,7 @@ func IsRefreshTokenVarSet() bool {
 }
 
 func NotifyAuthRequired() {
-	fmt.Println("Authentication required. Please set COCLI_REFRESH_TOKEN, or login with `cocli login`")
+	fmt.Print("Authentication required. Please set COCLI_REFRESH_TOKEN, or login with `cocli auth login`\n\n")
 }
 
 // Below here - NO TOUCHY

@@ -12,12 +12,6 @@ var currentUserCmd = &cobra.Command{
 	Use:   "current_user",
 	Short: "List authenticated user information",
 	Run: func(cmd *cobra.Command, args []string) {
-		// check if any creds present
-		if !(cocli.CredsFileExists() || cocli.IsRefreshTokenVarSet()) {
-			cocli.NotifyAuthRequired()
-			return
-		}
-
 		baseDomain := fmt.Sprintf("https://%s/api/public/cli/v1", cocli.GetCoherenceDomain())
 		res, err := cocli.CoherenceApiRequest(
 			"GET",
@@ -31,10 +25,6 @@ var currentUserCmd = &cobra.Command{
 		bodyBytes, err := io.ReadAll(res.Body)
 		if err != nil {
 			panic(err)
-		}
-
-		if res.StatusCode == 401 {
-			// handle unauthorized
 		}
 
 		fmt.Println(string(bodyBytes))

@@ -14,7 +14,7 @@ var loginCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		// Check if creds configured via env var
 		if cocli.IsRefreshTokenVarSet() {
-			fmt.Println("\nAlready logged in... to logout unset COCLI_REFRESH_TOKEN")
+			fmt.Println("Already logged in... to logout unset COCLI_REFRESH_TOKEN")
 			return
 		}
 
