@@ -42,6 +42,10 @@ var oauthConfig = &oauth2.Config{
 	Scopes: []string{"offline_access", "openid", "email", "profile"},
 }
 
+func GetCliVersion() string {
+	return "0.0.1"
+}
+
 func GetCoherenceApiPrefix() string {
 	if strings.ToLower(os.Getenv("COHERENCE_DEV")) == "true" {
 		return "/api/public/cli/v1"

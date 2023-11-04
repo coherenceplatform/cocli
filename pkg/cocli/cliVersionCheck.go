@@ -11,6 +11,7 @@ type CoherenceMetadata struct {
 	PusherAppCluster      string `json:"PUSHER_APP_CLUSTER"`
 	PusherAppKey          string `json:"PUSHER_APP_KEY"`
 	RudderStackJsWriteKey string `json:"RUDDERSTACK_JS_WRITE_KEY"`
+	CliApiVersion         string `json:"CLI_API_VERSION,omitempty"`
 }
 
 func RunCliVersionCheck() {
@@ -37,7 +38,9 @@ func RunCliVersionCheck() {
 
 	metadata := &CoherenceMetadata{}
 	json.Unmarshal(bodyBytes, &metadata)
-	fmt.Println(metadata)
+	if GetCliVersion() != metadata.CliApiVersion {
+		fmt.Print("WARNING: There is a newer version of cocli available. Some commands may not work as expected until you update your cocli version\n\n")
+	}
 
 	return
 }

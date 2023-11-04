@@ -11,7 +11,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:     "cocli",
 	Short:   "cocli - A cli for interacting with the Coherence API",
-	Version: "0.0.1",
+	Version: cocli.GetCliVersion(),
 }
 
 func Execute() {
