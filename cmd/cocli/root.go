@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/coherenceplatform/cocli/pkg/cocli"
 	"github.com/spf13/cobra"
 )
 
@@ -23,4 +24,5 @@ func Execute() {
 func init() {
 	rootCmd.AddCommand(authCmd)
 	rootCmd.AddCommand(currentUserCmd)
+	cocli.RunCliVersionCheck()
 }

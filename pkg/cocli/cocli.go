@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"strings"
 
 	"golang.org/x/oauth2"
 )
@@ -41,6 +42,14 @@ var oauthConfig = &oauth2.Config{
 	Scopes: []string{"offline_access", "openid", "email", "profile"},
 }
 
+func GetCoherenceApiPrefix() string {
+	if strings.ToLower(os.Getenv("COHERENCE_DEV")) == "true" {
+		return "/api/public/cli/v1"
+	}
+
+	return "/api/cli/v1"
+}
+
 func GetCoherenceDomain() string {
 	return coherenceDomain
 }
@@ -50,7 +59,6 @@ func GetAuthDomain() string {
 }
 
 func CoherenceApiRequest(method string, url string, body io.Reader) (*http.Response, error) {
-	// TODO: perform pre-flight metadata checks here
 	return AuthenticatedRequest(
 		method,
 		url,
@@ -100,7 +108,6 @@ func GetRefreshedToken() *TokenWithIdToken {
 		panic("Unauthorized")
 	}
 
-	// TODO: handle case where we use refresh token env var
 	token := GetTokenFromCredsFile()
 	if token == nil {
 		token = &oauth2.Token{

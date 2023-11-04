@@ -12,10 +12,14 @@ var currentUserCmd = &cobra.Command{
 	Use:   "current_user",
 	Short: "List authenticated user information",
 	Run: func(cmd *cobra.Command, args []string) {
-		baseDomain := fmt.Sprintf("https://%s/api/public/cli/v1", cocli.GetCoherenceDomain())
+		currentUserUrl := fmt.Sprintf(
+			"https://%s%s/current_user",
+			cocli.GetCoherenceDomain(),
+			cocli.GetCoherenceApiPrefix(),
+		)
 		res, err := cocli.CoherenceApiRequest(
 			"GET",
-			fmt.Sprintf("%s/current_user", baseDomain),
+			currentUserUrl,
 			nil,
 		)
 		if err != nil {
