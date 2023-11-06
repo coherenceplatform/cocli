@@ -1,6 +1,7 @@
 package cocli
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -249,31 +250,12 @@ func NotifyAuthRequired() {
 	fmt.Print("Authentication required. Please set COCLI_REFRESH_TOKEN, or login with `cocli auth login`\n\n")
 }
 
-// Below here - NO TOUCHY
-type TokenWithIdToken struct {
-	*oauth2.Token
-	IDToken string `json:"id_token,omitempty"`
-}
-
-type TokenWithIdTokenSource struct {
-	oauth2.TokenSource
-}
-
-func (tidts *TokenWithIdTokenSource) Token() (*TokenWithIdToken, error) {
-	token, err := tidts.TokenSource.Token()
+func FormatJSONOutput(bodyBytes []byte) string {
+	var formattedRespBody bytes.Buffer
+	err := json.Indent(&formattedRespBody, bodyBytes, "", "    ")
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
-	// This means token was not refreshed
-	if token.Extra("id_token") == nil {
-		return GetIdTokenFromCredsFile(), nil
-	}
-
-	tokenWithIdToken := &TokenWithIdToken{
-		Token:   token,
-		IDToken: token.Extra("id_token").(string),
-	}
-
-	return tokenWithIdToken, nil
+	return string(formattedRespBody.Bytes())
 }

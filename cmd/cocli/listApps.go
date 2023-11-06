@@ -8,18 +8,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var currentUserCmd = &cobra.Command{
-	Use:   "current_user",
-	Short: "List authenticated coherence user information",
+var listAppsCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List all coherence applications",
+	Long:  "List all coherence applications that are accessible by the currently authenticated user.",
 	Run: func(cmd *cobra.Command, args []string) {
-		currentUserUrl := fmt.Sprintf(
-			"https://%s%s/current_user",
+		appsListUrl := fmt.Sprintf(
+			"https://%s%s/applications",
 			cocli.GetCoherenceDomain(),
 			cocli.GetCoherenceApiPrefix(),
 		)
 		res, err := cocli.CoherenceApiRequest(
 			"GET",
-			currentUserUrl,
+			appsListUrl,
 			nil,
 		)
 		if err != nil {

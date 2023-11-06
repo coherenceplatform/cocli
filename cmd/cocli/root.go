@@ -23,6 +23,8 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(authCmd)
+	rootCmd.AddCommand(featureCmd)
 	rootCmd.AddCommand(currentUserCmd)
+	rootCmd.AddCommand(applicationCmd)
 	cocli.RunCliVersionCheck()
 }

@@ -27,6 +27,6 @@ var getUserInfoCmd = &cobra.Command{
 			panic(err)
 		}
 
-		fmt.Println(string(bodyBytes))
+		fmt.Println(cocli.FormatJSONOutput(bodyBytes))
 	},
 }

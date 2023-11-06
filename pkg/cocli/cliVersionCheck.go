@@ -15,7 +15,6 @@ type CoherenceMetadata struct {
 }
 
 func RunCliVersionCheck() {
-	// TODO: perform pre-flight metadata checks here
 	client := &http.Client{}
 	req, err := http.NewRequest(
 		"GET",
