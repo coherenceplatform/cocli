@@ -104,6 +104,17 @@ func AuthenticatedRequest(method string, url string, body io.Reader, bearer_toke
 		}
 	}
 
+	if res.StatusCode != http.StatusOK {
+		defer res.Body.Close()
+		bodyBytes, err := io.ReadAll(res.Body)
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println(res.StatusCode)
+		panic(FormatJSONOutput(bodyBytes))
+	}
+
 	return res, err
 }
 

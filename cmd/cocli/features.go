@@ -12,4 +12,5 @@ var featureCmd = &cobra.Command{
 func init() {
 	featureCmd.AddCommand(listFeaturesCmd)
 	featureCmd.AddCommand(createFeatureCmd)
+	featureCmd.AddCommand(archiveFeatureCmd)
 }
