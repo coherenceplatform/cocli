@@ -1,8 +1,12 @@
 package cocli
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
 
+	"github.com/coherenceplatform/cocli/pkg/cocli"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +18,36 @@ var createFeatureCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		branchName := args[0]
-		fmt.Printf("branch %s | appId %s", branchName, fmt.Sprint(createFeatureAppId))
+		createFeaturePayloadData := map[string]string{
+			"application_id": fmt.Sprint(createFeatureAppId),
+			"branch_name":    branchName,
+		}
+		payloadBytes, err := json.Marshal(createFeaturePayloadData)
+		if err != nil {
+			panic(err)
+		}
+		payload := bytes.NewBuffer(payloadBytes)
+
+		featuresCreateUrl := fmt.Sprintf(
+			"https://%s%s/features",
+			cocli.GetCoherenceDomain(),
+			cocli.GetCoherenceApiPrefix(),
+		)
+		res, err := cocli.CoherenceApiRequest(
+			"POST",
+			featuresCreateUrl,
+			payload,
+		)
+		if err != nil {
+			panic(err)
+		}
+		defer res.Body.Close()
+		bodyBytes, err := io.ReadAll(res.Body)
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println(cocli.FormatJSONOutput(bodyBytes))
 	},
 }
 
