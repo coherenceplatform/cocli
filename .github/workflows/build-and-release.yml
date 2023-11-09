@@ -1,0 +1,49 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+      - aa/initial-setup # TODO: remove this after testing workflow
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21
+
+      - name: Build CLI
+        run: |
+          go build -o cocli main.go
+          # Add any additional build steps if needed
+
+      - name: Set Tag Name
+        id: set_tag_name
+        run: echo "TAG_NAME=$(cat cocli_version.txt)" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v${{ env.TAG_NAME }}
+          release_name: Release v${{ env.TAG_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./cocli
+          asset_name: cocli
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

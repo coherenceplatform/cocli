@@ -17,11 +17,11 @@ import (
 
 // For dev (main/review)
 const (
-	clientID      = "O5AkI9iHd4Okb3DCmu1P0em4YXFjAPr5"
-	authDomain    = "dev-mkiob4vl.us.auth0.com"
-	credsFilename = "~/.cocli/.authtoken"
-	// coherenceDomain = "aa-external-cocli.control-plane-review.coherence.coherencesites.com"
-	coherenceDomain = "126bdeab-68f9-4d29-a22d-51f193623390-web.coherencedev.com"
+	clientID        = "O5AkI9iHd4Okb3DCmu1P0em4YXFjAPr5"
+	authDomain      = "dev-mkiob4vl.us.auth0.com"
+	credsFilename   = "~/.cocli/.authtoken"
+	coherenceDomain = "aa-external-cocli.control-plane-review.coherence.coherencesites.com"
+	// coherenceDomain = "126bdeab-68f9-4d29-a22d-51f193623390-web.coherencedev.com"
 	// coherenceDomain = "main.control-plane-review.coherence.coherencesites.com"
 )
 
@@ -44,7 +44,19 @@ var oauthConfig = &oauth2.Config{
 }
 
 func GetCliVersion() string {
-	return "0.0.1"
+	filePath := "cocli_version.txt"
+	file, err := os.Open(filePath)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil {
+		panic(err)
+	}
+
+	return string(content)
 }
 
 func GetCoherenceApiPrefix() string {
