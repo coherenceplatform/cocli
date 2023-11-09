@@ -21,8 +21,7 @@ jobs:
 
       - name: Build CLI
         run: |
-          go build -o cocli main.go
-          # Add any additional build steps if needed
+          ./cocli_build.sh cocli
 
       - name: Set Tag Name
         id: set_tag_name
@@ -37,13 +36,35 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload Release Asset (darwin/arm64)
+        id: upload-release-asset-darwin-arm64
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./cocli
-          asset_name: cocli
+          asset_path: ./cocli-darwin-arm64
+          asset_name: cocli-darwin-arm64
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset (linux/arm64)
+        id: upload-release-asset-linux-arm64
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./cocli-linux-arm64
+          asset_name: cocli-linux-arm64
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset (windows/arm64)
+        id: upload-release-asset-windows-arm64
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./cocli-windows-amd64.exe
+          asset_name: cocli-windows-amd64.exe
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
