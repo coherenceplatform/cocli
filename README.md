@@ -26,3 +26,11 @@ N.B. If you get an error trying to use the cli on a mac (along the lines of e.g.
 To change your target environment update the `CoherenceDomain` in the `devConfig`. It can be found in `pkg/cocli/cocli.go`.
 
 If you are targeting a workspace, the cli will need to use a slightly different api url path. This will be handled automatically by cocli.
+
+### Versioning
+
+To update the cocli version it needs to be set in 2 places:
+- update the `cliVersion` constant in `pkg/cocli/cocli.go`
+- update the version in `cli_version.txt`
+
+In addition to the above, the cli api version should be updated in the control-plane metadata response.
