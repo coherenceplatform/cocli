@@ -1,6 +1,6 @@
 # cocli
 
-## Using cocli
+## Installation
 
 1. Go to [releases](https://github.com/coherenceplatform/cocli/releases) and download the binary for your os/architecture (e.g. linux/arm64)
 
@@ -20,3 +20,9 @@ cocli -h
 ```
 
 N.B. If you get an error trying to use the cli on a mac (along the lines of e.g. "...can’t be opened because apple cannot check it for malicious software.") then [follow these steps](https://support.apple.com/guide/mac-help/apple-cant-check-app-for-malicious-software-mchleab3a043/mac) to grant an exception for cocli.
+
+## Development
+
+To change your target environment update the `CoherenceDomain` in the `devConfig`. It can be found in `pkg/cocli/cocli.go`.
+
+If you are targeting a workspace, the cli will need to use a slightly different api url path. This will be handled automatically by cocli.

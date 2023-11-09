@@ -15,33 +15,49 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// For dev (main/review)
+type CocliConfig struct {
+	ClientID        string
+	AuthDomain      string
+	CoherenceDomain string
+}
+
+var devConfig = &CocliConfig{
+	ClientID:        "O5AkI9iHd4Okb3DCmu1P0em4YXFjAPr5",
+	AuthDomain:      "dev-mkiob4vl.us.auth0.com",
+	CoherenceDomain: "aa-external-cocli.control-plane-review.coherence.coherencesites.com",
+}
+
+// CoherenceDomain: "126bdeab-68f9-4d29-a22d-51f193623390-web.coherencedev.com",
+// CoherenceDomain: "main.control-plane-review.coherence.coherencesites.com"
+
+// TODO: Update this config with prod settings
+var prodConfig = &CocliConfig{
+	ClientID:        "O5AkI9iHd4Okb3DCmu1P0em4YXFjAPr5",
+	AuthDomain:      "dev-mkiob4vl.us.auth0.com",
+	CoherenceDomain: "app.withcoherence.com",
+}
+
 const (
-	cliVersion      = "0.0.1"
-	clientID        = "O5AkI9iHd4Okb3DCmu1P0em4YXFjAPr5"
-	authDomain      = "dev-mkiob4vl.us.auth0.com"
-	credsFilename   = "~/.cocli/.authtoken"
-	coherenceDomain = "aa-external-cocli.control-plane-review.coherence.coherencesites.com"
-	// coherenceDomain = "126bdeab-68f9-4d29-a22d-51f193623390-web.coherencedev.com"
-	// coherenceDomain = "main.control-plane-review.coherence.coherencesites.com"
+	cliVersion    = "0.0.1"
+	credsFilename = "~/.cocli/.authtoken"
 )
 
-// TODO: For prod
-// const (
-// 	clientID      = "O5AkI9iHd4Okb3DCmu1P0em4YXFjAPr5"
-// 	authDomain    = "dev-mkiob4vl.us.auth0.com"
-// 	credsFilename = "~/.cocli/.authtoken"
-//  coherenceDomain = "app.withcoherence.com"
-// )
-
 var oauthConfig = &oauth2.Config{
-	ClientID: clientID,
+	ClientID: GetCliConfig().ClientID,
 	Endpoint: oauth2.Endpoint{
-		AuthURL:       fmt.Sprintf("https://%s/authorize", authDomain),
-		TokenURL:      fmt.Sprintf("https://%s/oauth/token", authDomain),
-		DeviceAuthURL: fmt.Sprintf("https://%s/oauth/device/code", authDomain),
+		AuthURL:       fmt.Sprintf("https://%s/authorize", GetCliConfig().AuthDomain),
+		TokenURL:      fmt.Sprintf("https://%s/oauth/token", GetCliConfig().AuthDomain),
+		DeviceAuthURL: fmt.Sprintf("https://%s/oauth/device/code", GetCliConfig().AuthDomain),
 	},
 	Scopes: []string{"offline_access", "openid", "email", "profile"},
+}
+
+func GetCliConfig() CocliConfig {
+	if strings.ToLower(os.Getenv("COHERENCE_ENVIRONMENT_NAME")) == "production" {
+		return *prodConfig
+	}
+
+	return *devConfig
 }
 
 func GetCliVersion() string {
@@ -68,7 +84,7 @@ func GetCliVersion() string {
 }
 
 func GetCoherenceApiPrefix() string {
-	if strings.ToLower(os.Getenv("COHERENCE_DEV")) == "true" {
+	if strings.Contains(GetCliConfig().CoherenceDomain, ".coherencedev.com") {
 		return "/api/public/cli/v1"
 	}
 
@@ -76,11 +92,11 @@ func GetCoherenceApiPrefix() string {
 }
 
 func GetCoherenceDomain() string {
-	return coherenceDomain
+	return GetCliConfig().CoherenceDomain
 }
 
 func GetAuthDomain() string {
-	return authDomain
+	return GetCliConfig().AuthDomain
 }
 
 func CoherenceApiRequest(method string, url string, body io.Reader) (*http.Response, error) {
