@@ -17,6 +17,7 @@ import (
 
 // For dev (main/review)
 const (
+	cliVersion      = "0.0.1"
 	clientID        = "O5AkI9iHd4Okb3DCmu1P0em4YXFjAPr5"
 	authDomain      = "dev-mkiob4vl.us.auth0.com"
 	credsFilename   = "~/.cocli/.authtoken"
@@ -45,18 +46,25 @@ var oauthConfig = &oauth2.Config{
 
 func GetCliVersion() string {
 	filePath := "cocli_version.txt"
-	file, err := os.Open(filePath)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
+	_, err := os.Stat(filePath)
+	if err == nil {
+		file, err := os.Open(filePath)
+		if err != nil {
+			panic(err)
+		}
+		defer file.Close()
 
-	content, err := io.ReadAll(file)
-	if err != nil {
-		panic(err)
+		content, err := io.ReadAll(file)
+		if err != nil {
+			panic(err)
+		}
+
+		if string(content) != cliVersion {
+			panic("cocli version mismatch - make sure constant cliVersion and the contents of cocli_version.txt match!")
+		}
 	}
 
-	return string(content)
+	return cliVersion
 }
 
 func GetCoherenceApiPrefix() string {

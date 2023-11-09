@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - aa/initial-setup # TODO: remove this after testing workflow
 
 jobs:
   build-and-release:
