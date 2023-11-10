@@ -30,10 +30,9 @@ var devConfig = &CocliConfig{
 // CoherenceDomain: "126bdeab-68f9-4d29-a22d-51f193623390-web.coherencedev.com",
 // CoherenceDomain: "main.control-plane-review.coherence.coherencesites.com"
 
-// TODO: Update this config with prod settings
 var prodConfig = &CocliConfig{
-	ClientID:        "O5AkI9iHd4Okb3DCmu1P0em4YXFjAPr5",
-	AuthDomain:      "dev-mkiob4vl.us.auth0.com",
+	ClientID:        "YfsRrC0cs29oEMc6Md9QtRopYLWa3785",
+	AuthDomain:      "coherenceplatform.us.auth0.com",
 	CoherenceDomain: "app.withcoherence.com",
 }
 
@@ -53,11 +52,11 @@ var oauthConfig = &oauth2.Config{
 }
 
 func GetCliConfig() CocliConfig {
-	if strings.ToLower(os.Getenv("COHERENCE_ENVIRONMENT_NAME")) == "production" {
-		return *prodConfig
+	if strings.ToLower(os.Getenv("COHERENCE_ENVIRONMENT")) == "review" {
+		return *devConfig
 	}
 
-	return *devConfig
+	return *prodConfig
 }
 
 func GetCliVersion() string {

@@ -23,6 +23,7 @@ N.B. If you get an error trying to use the cli on a mac (along the lines of e.g.
 
 ## Development
 
+By default, cocli is configured for production use. During development you should `export COHERENCE_ENVIRONMENT=review`.
 To change your target environment update the `CoherenceDomain` in the `devConfig`. It can be found in `pkg/cocli/cocli.go`.
 
 If you are targeting a workspace, the cli will need to use a slightly different api url path. This will be handled automatically by cocli.
