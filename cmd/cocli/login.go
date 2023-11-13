@@ -21,7 +21,7 @@ var loginCmd = &cobra.Command{
 		// Check if there are already creds present (maybe in some config file)
 		token := cocli.GetTokenFromCredsFile()
 		if token != nil {
-			fmt.Println("\nAlready logged in... to logout use `cocli logout`")
+			fmt.Println("\nAlready logged in... to logout use `cocli auth logout`")
 			return
 		}
 		// If not, start device code flow
