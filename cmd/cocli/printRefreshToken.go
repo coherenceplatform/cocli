@@ -13,6 +13,11 @@ var printRefreshTokenCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		token := cocli.GetTokenFromCredsFile()
 
+		if token == nil {
+			fmt.Println("No credentials present, please login with `cocli auth login`")
+			return
+		}
+
 		fmt.Printf("COCLI_REFRESH_TOKEN='%s'\n", token.RefreshToken)
 	},
 }
