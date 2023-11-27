@@ -32,12 +32,12 @@ var devConfig = &CocliConfig{
 
 var prodConfig = &CocliConfig{
 	ClientID:        "YfsRrC0cs29oEMc6Md9QtRopYLWa3785",
-	AuthDomain:      "coherenceplatform.us.auth0.com",
+	AuthDomain:      "auth.withcoherence.com",
 	CoherenceDomain: "app.withcoherence.com",
 }
 
 const (
-	cliVersion    = "0.0.1"
+	cliVersion    = "0.0.2"
 	credsFilename = "~/.cocli/.authtoken"
 )
 

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type CoherenceMetadata struct {
@@ -37,9 +39,44 @@ func RunCliVersionCheck() {
 
 	metadata := &CoherenceMetadata{}
 	json.Unmarshal(bodyBytes, &metadata)
-	if GetCliVersion() != metadata.CliApiVersion {
+
+	parsedCliVersion, err := semverToFloat(GetCliVersion())
+	if err != nil {
+		panic(err)
+	}
+	parsedMetaCliVersion, err := semverToFloat(metadata.CliApiVersion)
+	if err != nil {
+		panic(err)
+	}
+
+	if parsedCliVersion < parsedMetaCliVersion {
 		fmt.Print("WARNING: There is a newer version of cocli available. Some commands may not work as expected until you update your cocli version\n\n")
 	}
 
 	return
+}
+
+func semverToFloat(version string) (float64, error) {
+	// Split the version string into major and minor parts using the dot as the separator
+	parts := strings.Split(version, ".")
+
+	if len(parts) < 2 {
+		return 0.0, fmt.Errorf("Invalid semver version string: %s", version)
+	}
+
+	// Parse the major and minor components into integers
+	major, err := strconv.Atoi(parts[0])
+	if err != nil {
+		return 0.0, err
+	}
+
+	minor, err := strconv.Atoi(parts[1])
+	if err != nil {
+		return 0.0, err
+	}
+
+	// Convert major and minor components to a float
+	versionFloat := float64(major) + float64(minor)/10.0
+
+	return versionFloat, nil
 }

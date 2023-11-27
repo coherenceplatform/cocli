@@ -57,6 +57,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload Release Asset (linux/386)
+        id: upload-release-asset-linux-386
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./cocli-linux-386
+          asset_name: cocli-linux-386
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset (linux/amd64)
+        id: upload-release-asset-linux-amd64
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./cocli-linux-amd64
+          asset_name: cocli-linux-amd64
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload Release Asset (windows/arm64)
         id: upload-release-asset-windows-arm64
         uses: actions/upload-release-asset@v1

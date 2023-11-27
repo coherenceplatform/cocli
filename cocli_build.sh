@@ -6,7 +6,7 @@ if [[ -z "$package_name" ]]; then
   exit 1
 fi
 
-platforms=("darwin/arm64" "linux/arm64" "windows/amd64")
+platforms=("darwin/arm64" "linux/arm64" "linux/386" "linux/amd64" "windows/amd64")
 
 for platform in "${platforms[@]}"
 do
