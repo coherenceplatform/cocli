@@ -64,19 +64,25 @@ func semverToFloat(version string) (float64, error) {
 		return 0.0, fmt.Errorf("Invalid semver version string: %s", version)
 	}
 
-	// Parse the major and minor components into integers
+	// Parse the major component into an integer
 	major, err := strconv.Atoi(parts[0])
 	if err != nil {
 		return 0.0, err
 	}
 
-	minor, err := strconv.Atoi(parts[1])
+	// Parse the minor component into a float
+	minorParts := strings.Split(parts[1], "")
+	if len(minorParts) == 0 {
+		return 0.0, fmt.Errorf("Invalid semver version string: %s", version)
+	}
+
+	minorFloat, err := strconv.ParseFloat("0."+strings.Join(minorParts, ""), 64)
 	if err != nil {
 		return 0.0, err
 	}
 
-	// Convert major and minor components to a float
-	versionFloat := float64(major) + float64(minor)/10.0
+	// Combine major and minor components into a float
+	versionFloat := float64(major) + minorFloat
 
 	return versionFloat, nil
 }
