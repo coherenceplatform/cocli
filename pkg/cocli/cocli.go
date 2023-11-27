@@ -37,7 +37,7 @@ var prodConfig = &CocliConfig{
 }
 
 const (
-	cliVersion    = "0.0.2"
+	cliVersion    = "0.0.3"
 	credsFilename = "~/.cocli/.authtoken"
 )
 
