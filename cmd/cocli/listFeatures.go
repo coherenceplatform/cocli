@@ -12,8 +12,8 @@ var listFeaturesAppId int
 
 var listFeaturesCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all coherence applications",
-	Long:  "List all coherence applications that are accessible by the currently authenticated user.",
+	Short: "List coherence features",
+	Long:  "List all coherence features for the specified application.",
 	Run: func(cmd *cobra.Command, args []string) {
 		featuresListUrl := fmt.Sprintf(
 			"https://%s%s/features?application_id=%s",

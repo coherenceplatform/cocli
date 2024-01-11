@@ -24,11 +24,11 @@ type CocliConfig struct {
 var devConfig = &CocliConfig{
 	ClientID:        "O5AkI9iHd4Okb3DCmu1P0em4YXFjAPr5",
 	AuthDomain:      "dev-mkiob4vl.us.auth0.com",
-	CoherenceDomain: "main.control-plane-review.coherence.coherencesites.com",
+	CoherenceDomain: "7ddf4b8e-682e-433f-b93f-fd24f4dda1ce-web.coherencedev.com",
 }
 
 // CoherenceDomain: "aa-external-cocli.control-plane-review.coherence.coherencesites.com",
-// CoherenceDomain: "126bdeab-68f9-4d29-a22d-51f193623390-web.coherencedev.com",
+// CoherenceDomain: "main.control-plane-review.coherence.coherencesites.com",
 
 var prodConfig = &CocliConfig{
 	ClientID:        "YfsRrC0cs29oEMc6Md9QtRopYLWa3785",
@@ -37,7 +37,7 @@ var prodConfig = &CocliConfig{
 }
 
 const (
-	cliVersion    = "0.0.3"
+	cliVersion    = "0.1.0"
 	credsFilename = "~/.cocli/.authtoken"
 )
 
