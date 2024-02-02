@@ -12,4 +12,5 @@ var environmentCmd = &cobra.Command{
 func init() {
 	environmentCmd.AddCommand(listEnvironmentsCmd)
 	environmentCmd.AddCommand(environmentImageOverrideCmd)
+	environmentCmd.AddCommand(promoteStaticEnvironmentCmd)
 }
