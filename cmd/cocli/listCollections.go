@@ -8,22 +8,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var listFeaturesAppId int
+var listCollectionsAppId int
 
-var listFeaturesCmd = &cobra.Command{
+var listCollectionsCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List coherence features",
-	Long:  "List all coherence features for the specified application.",
+	Short: "List environment collections",
+	Long:  "List all environment collections for the specified application.",
 	Run: func(cmd *cobra.Command, args []string) {
-		featuresListUrl := fmt.Sprintf(
-			"https://%s%s/features?application_id=%s",
+		collectionsListUrl := fmt.Sprintf(
+			"%s/api/v1/applications/%s/collections",
 			cocli.GetCoherenceDomain(),
-			cocli.GetCoherenceApiPrefix(),
-			fmt.Sprint(listFeaturesAppId),
+			fmt.Sprint(listCollectionsAppId),
 		)
 		res, err := cocli.CoherenceApiRequest(
 			"GET",
-			featuresListUrl,
+			collectionsListUrl,
 			nil,
 		)
 		if err != nil {
@@ -40,6 +39,6 @@ var listFeaturesCmd = &cobra.Command{
 }
 
 func init() {
-	listFeaturesCmd.Flags().IntVarP(&listFeaturesAppId, "app_id", "a", 0, "App ID (required)")
-	listFeaturesCmd.MarkFlagRequired("app_id")
+	listCollectionsCmd.Flags().IntVarP(&listCollectionsAppId, "app_id", "a", 0, "App ID (required)")
+	listCollectionsCmd.MarkFlagRequired("app_id")
 }
