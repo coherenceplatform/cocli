@@ -18,7 +18,7 @@ do
 		output_name+='.exe'
 	fi
 
-	env GOOS=$GOOS GOARCH=$GOARCH go build -o $output_name main.go
+	env CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o $output_name -a -ldflags '-extldflags "-static"' main.go
 	if [ $? -ne 0 ]; then
    		echo 'An error has occurred! Aborting the script execution...'
 		exit 1
