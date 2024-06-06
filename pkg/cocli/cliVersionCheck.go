@@ -20,7 +20,7 @@ func RunCliVersionCheck() {
 	client := &http.Client{}
 	req, err := http.NewRequest(
 		"GET",
-		fmt.Sprintf("https://%s/api/public/v1/metadata", GetCoherenceDomain()),
+		fmt.Sprintf("%s/api/v1/metadata", GetCoherenceDomain()),
 		nil,
 	)
 	if err != nil {
@@ -36,6 +36,9 @@ func RunCliVersionCheck() {
 
 	defer res.Body.Close()
 	bodyBytes, err := io.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
 
 	metadata := &CoherenceMetadata{}
 	json.Unmarshal(bodyBytes, &metadata)
@@ -52,8 +55,6 @@ func RunCliVersionCheck() {
 	if parsedCliVersion < parsedMetaCliVersion {
 		fmt.Print("WARNING: There is a newer version of cocli available. Some commands may not work as expected until you update your cocli version\n\n")
 	}
-
-	return
 }
 
 func semverToFloat(version string) (float64, error) {
@@ -61,7 +62,7 @@ func semverToFloat(version string) (float64, error) {
 	parts := strings.Split(version, ".")
 
 	if len(parts) < 2 {
-		return 0.0, fmt.Errorf("Invalid semver version string: %s", version)
+		return 0.0, fmt.Errorf("invalid semver version string: %s", version)
 	}
 
 	// Parse the major component into an integer
@@ -73,7 +74,7 @@ func semverToFloat(version string) (float64, error) {
 	// Parse the minor component into a float
 	minorParts := strings.Split(parts[1], "")
 	if len(minorParts) == 0 {
-		return 0.0, fmt.Errorf("Invalid semver version string: %s", version)
+		return 0.0, fmt.Errorf("invalid semver version string: %s", version)
 	}
 
 	minorFloat, err := strconv.ParseFloat("0."+strings.Join(minorParts, ""), 64)

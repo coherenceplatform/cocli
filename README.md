@@ -21,17 +21,6 @@ cocli -h
 
 N.B. If you get an error trying to use the cli on a mac (along the lines of e.g. "...can’t be opened because apple cannot check it for malicious software.") then [follow these steps](https://support.apple.com/guide/mac-help/apple-cant-check-app-for-malicious-software-mchleab3a043/mac) to grant an exception for cocli.
 
-## Development
-
-By default, cocli is configured for production use. During development you should `export COHERENCE_ENVIRONMENT=review`.
-To change your target environment update the `CoherenceDomain` in the `devConfig`. It can be found in `pkg/cocli/cocli.go`.
-
-If you are targeting a workspace, the cli will need to use a slightly different api url path. This will be handled automatically by cocli.
-
-### Versioning
-
-To update the cocli version it needs to be set in 2 places:
-- update the `cliVersion` constant in `pkg/cocli/cocli.go`
-- update the version in `cli_version.txt`
-
-In addition to the above, the cli api version should be updated in the control-plane metadata response.
+## Authentication
+For authentication you just need to get a [personal access token](https://docs.withcoherence.com) from coherence.
+cocli will expect the token to be set as `COHERENCE_ACCESS_TOKEN`

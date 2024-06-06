@@ -14,9 +14,8 @@ var listAppsCmd = &cobra.Command{
 	Long:  "List all coherence applications that are accessible by the currently authenticated user.",
 	Run: func(cmd *cobra.Command, args []string) {
 		appsListUrl := fmt.Sprintf(
-			"https://%s%s/applications",
+			"%s/api/v1/applications",
 			cocli.GetCoherenceDomain(),
-			cocli.GetCoherenceApiPrefix(),
 		)
 		res, err := cocli.CoherenceApiRequest(
 			"GET",
