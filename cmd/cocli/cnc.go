@@ -70,15 +70,19 @@ var cncCmd = &cobra.Command{
 			panic(err)
 		}
 
-		// Build the command with the new argument structure
-		commandArgs := []string{"-e", outputFile, "-f", outputFile}
-		commandArgs = append(commandArgs, args...)
+		env := os.Environ()
+		env = append(
+			env,
+			fmt.Sprintf("CNC_CONFIG_PATH=%s", outputFile),
+			fmt.Sprintf("CNC_ENVIRONMENTS_PATH=%s", outputFile),
+		)
 
 		// Run a shell command using the arguments passed to the Cobra command
-		cmdExec := exec.Command("cnc", commandArgs...)
+		cmdExec := exec.Command("cnc", args...)
 		cmdExec.Stdin = os.Stdin
 		cmdExec.Stdout = os.Stdout
 		cmdExec.Stderr = os.Stderr
+		cmdExec.Env = env
 
 		if err := cmdExec.Run(); err != nil {
 			fmt.Printf("Error running command: %v\n", err)
