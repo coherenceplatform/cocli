@@ -2,19 +2,21 @@
 
 ## Installation
 
-1. Go to [releases](https://github.com/coherenceplatform/cocli/releases) and download the binary for your os/architecture (e.g. linux/arm64)
+1. Go to [releases](https://github.com/coherenceplatform/cocli/releases) and download the binary for your os/architecture (e.g. linux/arm64). Copy the URL
 
-2. Move the file into a location that is in your `$PATH` (e.g. /usr/local/bin). We recommend renaming the file `cocli`. e.g.
+2. Download the file to your local filesystem, e.g. `wget https://github.com/coherenceplatform/cocli/releases/download/v1.0.2/cocli-linux-amd64`, rename it to `cocli` with `mv cocli-linux-amd64 cocli`.
+
+3. Move the file into a location that is in your `$PATH` (e.g. /usr/local/bin). We recommend renaming the file `cocli`. e.g.
 ```bash
 mv ~/Downloads/cocli-linux-arm64 /usr/local/bin/cocli
 ```
 
-3. You'll likely need to update permissions to make the file executable:
+4. You'll likely need to update permissions to make the file executable:
 ```bash
 chmod +x /usr/local/bin/cocli
 ```
 
-4. Test that cocli works:
+5. Test that cocli works:
 ```bash
 cocli -h
 ```
