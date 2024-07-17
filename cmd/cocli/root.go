@@ -26,5 +26,6 @@ func init() {
 	rootCmd.AddCommand(applicationCmd)
 	rootCmd.AddCommand(collectionCmd)
 	rootCmd.AddCommand(cncCmd)
+	rootCmd.AddCommand(environmentCmd)
 	cocli.RunCliVersionCheck()
 }

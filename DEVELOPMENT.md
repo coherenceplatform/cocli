@@ -12,6 +12,10 @@
 
 `go run main.go`
 
+## Running in docker
+
+docker run --rm -it -v "$(pwd)":/app -w /app golang:1.23rc2 bash
+
 ## Versioning
 
 To update the cocli version it needs to be set in 2 places:
