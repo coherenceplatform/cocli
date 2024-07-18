@@ -24,7 +24,7 @@ var prodConfig = &CocliConfig{
 	CoherenceDomain: "https://beta.withcoherence.com",
 }
 
-const cliVersion = "1.0.3"
+const cliVersion = "1.1.0"
 
 func GetCliConfig() CocliConfig {
 	if strings.ToLower(os.Getenv("COHERENCE_ENVIRONMENT")) == "review" {
