@@ -10,11 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type EnvironmentCloneServiceInfo struct {
-	Name            string `json:"name"`
-	TrackBranchName string `json:"track_branch_name,omitempty"`
-}
-
 var createEnvironmentCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new environment",
