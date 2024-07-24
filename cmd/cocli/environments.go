@@ -11,4 +11,7 @@ var environmentCmd = &cobra.Command{
 
 func init() {
 	environmentCmd.AddCommand(deployCmd)
+	environmentCmd.AddCommand(createEnvironmentCmd)
+	environmentCmd.AddCommand(editEnvironmentCmd)
+	environmentCmd.AddCommand(getEnvironmentCmd)
 }
