@@ -23,7 +23,7 @@ type EnvironmentDeploy struct {
 	ConfigureInfra bool                       `json:"configure_infra,omitempty"`
 }
 
-var deployCmd = &cobra.Command{
+var deployEnvironmentCmd = &cobra.Command{
 	Use:   "deploy <environment_id> <json_file_or_string>",
 	Short: "Deploy to a specific environment",
 	Long:  "Deploy services to a specific Coherence environment using a JSON configuration.",
