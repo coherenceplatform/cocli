@@ -15,7 +15,9 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+
 var cncCollectionId int
+var printOnly bool
 
 var cncCmd = &cobra.Command{
 	Use:   "cnc",
@@ -50,27 +52,32 @@ var cncCmd = &cobra.Command{
 			panic(err)
 		}
 
-		// Parse the JSON response
 		var responseData map[string]interface{}
 		if err := json.Unmarshal(bodyBytes, &responseData); err != nil {
 			panic(err)
 		}
 
-		// Extract the "data" key
 		data, ok := responseData["data"]
 		if !ok {
 			panic("response does not contain 'data' key")
 		}
 
-		// Convert the extracted data to YAML
 		yamlData, err := yaml.Marshal(data)
 		if err != nil {
 			panic(err)
 		}
 
-		// Write the YAML to a file
 		if err := os.WriteFile(outputFile, yamlData, 0644); err != nil {
 			panic(err)
+		}
+
+		if printOnly {
+			fmt.Println(string(yamlData))
+			if err := os.Remove(outputFile); err != nil {
+				fmt.Printf("Error deleting file %s: %v\n", outputFile, err)
+				os.Exit(1)
+			}
+			os.Exit(0)
 		}
 
 		env := os.Environ()
@@ -80,16 +87,11 @@ var cncCmd = &cobra.Command{
 			fmt.Sprintf("CNC_ENVIRONMENTS_PATH=%s", outputFile),
 		)
 
-		// Create a channel to receive OS signals
 		sigChan := make(chan os.Signal, 1)
-		// Notify the channel for SIGINT (Ctrl+C)
 		signal.Notify(sigChan, syscall.SIGINT)
-
-		// Create a channel to signal command completion
 		done := make(chan bool, 1)
 
 		go func() {
-			// Run a shell command using the arguments passed to the Cobra command
 			cmdExec := exec.Command("cnc", args...)
 			cmdExec.Stdin = os.Stdin
 			cmdExec.Stdout = os.Stdout
@@ -104,10 +106,8 @@ var cncCmd = &cobra.Command{
 			done <- true
 		}()
 
-		// Wait for either the command to finish or an interrupt
 		select {
 		case <-done:
-			// Command completed normally
 			if err := os.Remove(outputFile); err != nil {
 				fmt.Printf("Error deleting file %s: %v\n", outputFile, err)
 				os.Exit(1)
@@ -115,7 +115,7 @@ var cncCmd = &cobra.Command{
 			os.Exit(0)
 		case <-sigChan:
 			fmt.Println("\nInterrupt received. Waiting for cleanup...")
-			time.Sleep(3 * time.Second)  // Adjust this duration as needed
+			time.Sleep(3 * time.Second)
 			fmt.Println("Exiting.")
 
 			if err := os.Remove(outputFile); err != nil {
@@ -129,5 +129,6 @@ var cncCmd = &cobra.Command{
 
 func init() {
 	cncCmd.Flags().IntVarP(&cncCollectionId, "collection_id", "c", 0, "Collection ID (required)")
+	cncCmd.Flags().BoolVar(&printOnly, "print-only", false, "Print config and exit without running cnc")
 	cncCmd.MarkFlagRequired("collection_id")
 }
